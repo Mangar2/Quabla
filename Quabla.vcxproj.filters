@@ -45,6 +45,9 @@
     <ClCompile Include="search\perft.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="basics\piecesignature.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="basics\basicboard.h">
@@ -156,6 +159,12 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="search\searchparameter.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="basics\piecesignature.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="basics\piecesignaturemaps.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

@@ -37,9 +37,11 @@ void Board::removePiece(Square squareOfPiece) {
 	Piece pieceToRemove = basicBoard[squareOfPiece];
 	removePieceBB(squareOfPiece, pieceToRemove);
 	basicBoard.removePiece(squareOfPiece);
+	pieceSignature.removePiece(pieceToRemove, bitBoardsPiece[pieceToRemove]);
 }
 
 void Board::addPiece(Square squareOfPiece, Piece pieceToAdd) {
+	pieceSignature.addPiece(pieceToAdd, bitBoardsPiece[pieceToAdd]);
 	addPieceBB(squareOfPiece, pieceToAdd);
 	basicBoard.addPiece(squareOfPiece, pieceToAdd);
 }

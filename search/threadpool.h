@@ -363,7 +363,7 @@ namespace ChessSearch {
 				}
 				_examinedFree += free;
 				_examinedBusy += (busy - _waitingAmount);
-				if (busy > _workerCount) cout << busy << " waiting: " << _waitingAmount << endl;
+				// if (busy > _workerCount) cout << busy << " waiting: " << _waitingAmount << endl;
 			}
 		}
 

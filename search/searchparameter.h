@@ -22,6 +22,7 @@
 #ifndef __SEARCHPARAMETER_H
 #define __SEARCHPARAMETER_H
 
+#include "../basics/piecesignature.h"
 #include "searchdef.h"
 
 using namespace ChessBasics;
@@ -29,6 +30,9 @@ using namespace ChessBasics;
 namespace ChessSearch {
 	class SearchParameter {
 	public:
+
+	
+
 		/**
 		 * Calculates the reduction by nullmove
 		 */

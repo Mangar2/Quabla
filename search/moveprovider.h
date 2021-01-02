@@ -28,8 +28,7 @@
 //#include "Eval.h"
 //#include "EvalBoard.h"
 #include "killermove.h"
-#include "StaticExchangeEvaluation.h"
-#include "HistoryTable.h"
+#include "sse.h"
 #include "SearchParameter.h"
 #include "../movegenerator/movegenerator.h"
 

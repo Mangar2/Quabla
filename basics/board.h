@@ -28,19 +28,46 @@
 #include "move.h"
 #include "basicboard.h"
 #include "boardstate.h"
+#include "piecesignature.h"
 
 namespace ChessBasics {
 
 	class Board {
 	public:
 		Board();
+		/**
+		 * Sets a move on the board
+		 */
 		void doMove(Move move);
+		/*
+		 * Undoes a previously made move on the move
+		 * @param move move previously made
+		 * @param boardState a stored state from the board before doing the move incl. EP-Position
+		 */
 		void undoMove(Move move, BoardState boardState);
 		void clear();
-		inline auto getEP() { return basicBoard.getEP(); }
+		inline auto getEP() const { return basicBoard.getEP(); }
 		inline auto operator[](Square square) { return basicBoard[square]; }
-		inline auto isWhiteToMove() { return basicBoard.whiteToMove; }
+		inline auto isWhiteToMove() const { return basicBoard.whiteToMove; }
 		inline void setWhiteToMove(bool whiteToMove) { basicBoard.whiteToMove = whiteToMove; }
+
+		/**
+		 * Sets a nullmove on the board. A nullmove is a non legal chess move where the 
+		 * person to move does nothing and hand over the moving right to the opponent.
+		 */
+		inline void doNullmove() {
+			basicBoard.clearEP();
+			setWhiteToMove(!isWhiteToMove());
+		}
+
+		/*
+		 * Undoes a previously made nullmove
+		 * @param boardState a stored state from the board before doing the nullmove incl. EP-Position
+		 */
+		inline void undoNullmove(BoardState boardState) {
+			setWhiteToMove(!isWhiteToMove());
+			basicBoard.boardState = boardState;
+		}
 
 		/**
 		 * Checks, if king side castling is allowed
@@ -76,6 +103,18 @@ namespace ChessBasics {
 			if (piece == BLACK_KING) {
 				kingSquares[BLACK] = square;
 			}
+		}
+
+		/**
+		 * Computes the hash value of the current board
+		 * @returns board hash for the current position
+		 */
+		inline auto computeBoardHash() const {
+			return basicBoard.computeBoardHash();
+		}
+
+		inline auto drawDueToMissingMaterial() const {
+			return pieceSignature.drawDueToMissingMaterial();
 		}
 
 		BoardState getBoardState() { return basicBoard.boardState; }
@@ -149,6 +188,8 @@ namespace ChessBasics {
 		 */
 		void doMoveSpecialities(Move move);
 		void undoMoveSpecialities(Move move);
+
+		PieceSignature pieceSignature;
 
 	};
 }

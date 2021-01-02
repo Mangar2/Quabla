@@ -172,19 +172,19 @@ int main()
 	
 	// checkThreadPoolSpeed();
 	// checkThreadSpeed();
-	/*
+	
 	StdTimeControl timeControl;
-	for (uint32_t workerAmount = 11; workerAmount <= 11; workerAmount++) {
+	for (uint32_t workerAmount = 1; workerAmount <= 1; workerAmount++) {
 		adapter.setWorkerAmount(workerAmount);
 		timeControl.storeStartTime();
-		uint64_t totalNodes = adapter.perft(8);
+		uint64_t totalNodes = adapter.perft(7);
 		uint64_t timeSpent = timeControl.getTimeSpentInMilliseconds();
 		double nodesPerSecond = double(totalNodes) / 1000 / timeSpent;
 		cout << totalNodes << " end positions found, NPS: " << nodesPerSecond 
 			<< " threads: " << workerAmount + 1 << endl;
 	}
-	*/
-	adapter.setWorkerAmount(3);
+	
+	adapter.setWorkerAmount(1);
 	runTests(fenTests, 10000000000);
 }
 

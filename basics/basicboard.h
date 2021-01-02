@@ -110,14 +110,17 @@ public:
 	/**
 	 * Sets the capture square for an en passant move
 	 */
-	inline void setEP(Square destination) {
-		boardState.setEP(destination);
-	}
+	inline void setEP(Square destination) { boardState.setEP(destination); }
+	
+	/**
+	 * Clears the capture square for an en passant move
+	 */
+	inline void clearEP() { boardState.clearEP(); }
 
 	/**
 	 * Gets the EP square
 	 */
-	inline auto getEP() {
+	inline auto getEP() const {
 		return boardState.getEP();
 	}
 
@@ -147,7 +150,7 @@ public:
 	/**
 	 * Computes the current board hash
 	 */
-	inline hash_t computeBoardHash() {
+	inline hash_t computeBoardHash() const {
 		return boardState.computeBoardHash() ^ HashConstants::COLOR_RANDOMS[(int32_t)whiteToMove];
 	}
 

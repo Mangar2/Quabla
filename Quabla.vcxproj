@@ -208,6 +208,7 @@
     <ClCompile Include="basics\basicboard.cpp" />
     <ClCompile Include="basics\board.cpp" />
     <ClCompile Include="basics\hashconstants.cpp" />
+    <ClCompile Include="basics\piecesignature.cpp" />
     <ClCompile Include="interface\stdtimecontrol.cpp" />
     <ClCompile Include="interface\winboard.cpp" />
     <ClCompile Include="movegenerator\bitboardmasks.cpp" />
@@ -223,6 +224,8 @@
     <ClInclude Include="basics\hashconstants.h" />
     <ClInclude Include="basics\move.h" />
     <ClInclude Include="basics\movelist.h" />
+    <ClInclude Include="basics\piecesignature.h" />
+    <ClInclude Include="basics\piecesignaturemaps.h" />
     <ClInclude Include="basics\types.h" />
     <ClInclude Include="interface\clocksetting.h" />
     <ClInclude Include="interface\computinginfo.h" />

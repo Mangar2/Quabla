@@ -15,28 +15,10 @@
  *
  * @author Volker Böhm
  * @copyright Copyright (c) 2021 Volker Böhm
- * @Overview
- * Implements some type and constant defintions used for search algorithms
  */
 
-#ifndef __SEARCHDEF_H
-#define __SEARCHDEF_H
+#include "piecesignature.h"
 
-#include <assert.h>
-#include "../basics/types.h"
+using namespace ChessBasics;
 
-namespace ChessSearch {
-	typedef uint32_t ply_t;
-	typedef int32_t value_t;
-
-	const ply_t ONE_PLY = 1;
-
-	const value_t MAX_VALUE = 30000;
-	const value_t MIN_MATE_VALUE = MAX_VALUE - 1000;
-	const value_t WINNING_BONUS = 5000;
-
-	// the draw value is reseved and signales a forced draw (stalemate, repetition)
-	const value_t DRAW_VALUE = 1;
-}
-
-#endif // __SEARCHDEF_H
+PieceSignature::PieceToSignature PieceSignature::mapPieceToSignature;
