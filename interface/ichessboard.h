@@ -1,0 +1,138 @@
+/**
+ * @license
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Volker Böhm
+ * @copyright Copyright (c) 2021 Volker Böhm
+ * @Overview
+ * Implements a generic interface to chess boards to separate dedicated board implementations from
+ * the interface management
+ */
+
+#ifndef __ICHESSBOARD_H
+#define __ICHESSBOARD_H
+
+#include "clocksetting.h"
+#include "computinginfo.h"
+#include "iwhatif.h"
+
+namespace ChessInterface {
+
+	enum class GameResult {
+		NOT_ENDED,
+		DRAW_BY_REPETITION,
+		DRAW_BY_50_MOVES_RULE,
+		DRAW_BY_STALEMATE,
+		DRAW_BY_NOT_ENOUGHT_MATERIAL,
+		WHITE_WINS_BY_MATE,
+		BLACK_WINS_BY_MATE
+	};
+
+	class IChessBoard {
+	public:
+		/**
+		 * Sets a move, the information may be incomplete as long as the information is unambiguous
+		 */
+		virtual bool doMove(char movingPiece,
+			uint32_t depatureFile, uint32_t departureRank,
+			uint32_t destinationFile, uint32_t destinationRank,
+			char promotePiece) = 0;
+
+		/**
+		 * Undoes the last move - possible only, if the engine stores the last moves
+		 */
+		virtual void undoMove() = 0;
+
+		/**
+		 * Clears the board to an empty board
+		 */
+		virtual void clearBoard() = 0;
+
+		/**
+		 * Set castling rights
+		 */
+		virtual void setWhiteQueenSideCastlingRight(bool allow) = 0;
+		virtual void setWhiteKingSideCastlingRight(bool allow) = 0;
+		virtual void setBlackQueenSideCastlingRight(bool allow) = 0;
+		virtual void setBlackKingSideCastlingRight(bool allow) = 0;
+
+		/**
+		 * Set wether it is whites turn to move
+		 */
+		virtual void setWhiteToMove(bool whiteToMove) = 0;
+
+		/**
+		 * Set the amount of half moves without pawn move or capture played in the start position
+		 */
+		virtual void setHalfmovesWithouthPawnMoveOrCapture(uint16_t moves) = 0;
+
+		/**
+		 * Set the amount of half moves without pawn move or capture played in the start position
+		 */
+		virtual void setPlayedMovesInGame(uint16_t moves) = 0;
+
+		/**
+		 * Returns true, if it is whites turn to move
+		 */
+		virtual bool isWhiteToMove() = 0;
+
+		/**
+		 * Sets a piece to a square
+		 */
+		virtual void setPiece(uint32_t file, uint32_t rank, char piece) = 0;
+
+		/**
+		 * Starts perft calculation
+		 */
+		virtual uint64_t perft(uint16_t depth, uint32_t verbose = 1) = 0;
+
+		/**
+		 * Promptly print an information string for the current evaluation status
+		 */
+		virtual void printEvalInfo() = 0;
+
+		/**
+		 * Starts to compute a move
+		 */
+		virtual void computeMove(const ClockSetting& clockSetting, bool verbose = true) = 0;
+
+		/**
+		 * Print an information string for the current search status
+		 */
+		virtual void requestPrintSearchInfo() = 0;
+
+		/**
+		 * Stop calcuation and play the current move
+		 */
+		virtual void moveNow() = 0;
+
+		/**
+		 * Returns the current game status
+		 */
+		virtual GameResult getGameResult() = 0;
+
+		/**
+		 * Returns and information about the current computing result
+		 */
+		virtual ComputingInfo getComputingInfo() = 0;
+
+		/**
+		 * Returns a whatif evaluation structure (see IWhatIf for further information)
+		 */
+		virtual IWhatIf* getWhatIf() = 0;
+
+	};
+}
+
+#endif // __ICHESSBOARD_H
