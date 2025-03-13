@@ -214,6 +214,9 @@ namespace QaplaSearch {
 				_window[i].newDepth(searchDepth);
 			}
 			uint32_t numberOfPVSearchedMoves = 0;
+#ifdef USE_STOCKFISH_EVAL
+			Stockfish::Engine::set_position(position.getFen());
+#endif
 			do {
 				const auto alphaRed = std::max(0, int32_t(multiPV) - int32_t(numberOfPVSearchedMoves) - 1) * 5;
 				stack.initSearchAtRoot(position, _window[numberOfPVSearchedMoves].getAlpha() - alphaRed, _window[numberOfPVSearchedMoves].getBeta(), searchDepth);

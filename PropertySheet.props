@@ -5,7 +5,7 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <PreprocessorDefinitions>USE_AVX2;USE_POPCNT;USE_SSE2;USE_SSSE3;USE_SSE41;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_STOCKFISH_EVAL;USE_AVX2;USE_POPCNT;USE_SSE2;USE_SSSE3;USE_SSE41;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup />
