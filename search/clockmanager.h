@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <limits>
 #include <sys/timeb.h>
+#include <utility>
 #include "../basics/types.h"
 #include "../interface/clocksetting.h"
 #include "searchstate.h"
@@ -294,6 +295,13 @@ namespace QaplaSearch {
 				
 				// use movesToGo + 2 to not loose on time
 				averageTime = timeLeft / (movesToGo + 2);
+
+				constexpr int64_t AGRESSIVITY_INC_IN_PERCENT = 100;
+				constexpr int64_t TIME_PRESSURE_DIVISOR = 10;
+				int64_t timePressureCorrection = std::clamp<int64_t>(averageTime / timeLeft - 2, 0, TIME_PRESSURE_DIVISOR);
+				
+				averageTime += averageTime * AGRESSIVITY_INC_IN_PERCENT / 100 * timePressureCorrection / TIME_PRESSURE_DIVISOR;
+
 
 				// Infinite amount of moves:
 				if (_clockSetting.getMoveAmountForClock() == 0)
