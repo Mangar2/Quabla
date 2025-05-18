@@ -206,14 +206,7 @@ namespace QaplaSearch {
 		inline bool doOverwriteAlwaysReplaceEntry(
 			value_t positionValue, value_t alpha, value_t beta, ply_t computedDepth) const
 		{
-			bool result = true;
-			if (hasExactValue()) {
-				bool newValueIsPVValue = beta > positionValue && positionValue > alpha;
-				if (!newValueIsPVValue || computedDepth <= getComputedDepth()) {
-					result = false;
-				}
-			}
-			return result;
+			return true;
 		}
 
 
