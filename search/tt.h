@@ -86,10 +86,9 @@ namespace QaplaSearch {
 			if (isPV) return true;
 			auto entry = getEntry(index);
 			if (entry.isPV()) return false;
-			int16_t newWeight = computedDepth + !move.isEmpty() * 2;
-			int16_t oldWeight = entry.getComputedDepth() + !entry.getMove().isEmpty() * 2;
-			return newWeight >= oldWeight;
-		}
+			if (!move.isEmpty()) return true;
+			return computedDepth >= entry.getComputedDepth();
+		} 
 
 		/**
 		 * Gets the size of the transposition table in bytes
@@ -136,7 +135,7 @@ namespace QaplaSearch {
 			}
 
 			bool hashIsDifferent = !_tt[index].hasHash(hashKey);
-			if (!(hashIsDifferent && !_tt[index].isPV()) || isNewEntryMoreValuable(index, computedDepth, move, isPV))
+			if (!hashIsDifferent || _tt[index].isPV() || isNewEntryMoreValuable(index, computedDepth, move, isPV))
 			{
 				if (hashIsDifferent && _tt[index + 1].doOverwriteAlwaysReplaceEntry(
 					positionValue, alpha, beta, computedDepth)) 
