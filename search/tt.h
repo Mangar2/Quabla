@@ -80,14 +80,32 @@ namespace QaplaSearch {
 		 * checks if the new entry is more valuable to store than the current entry
 		 * Tested, but not good: overwrite less, if no hash move is provided
 		 */
-		bool isNewEntryMoreValuable(uint32_t index, ply_t computedDepth, Move move, bool isPV) const {
+		bool replaceFirstEntry(uint32_t index, hash_t hash, ply_t computedDepth, Move move, bool isPV) const {
 			if (isEntryFromFormerSearch(_tt[index])) return true;
 			// We always overwrite on PV
 			if (isPV) return true;
 			auto entry = getEntry(index);
 			if (entry.isPV()) return false;
+			// Second entry is always replaced with different position
+			if (hash != entry.getHash()) return true;
+			// Having a move signals a beta-cutoff, we probably use the entry fast with PV bounds
 			if (!move.isEmpty()) return true;
 			return computedDepth >= entry.getComputedDepth();
+		} 
+
+		bool replaceSecondEntry(uint32_t index, hash_t hash, ply_t computedDepth, Move move, bool isPV) const {
+			if (isEntryFromFormerSearch(_tt[index])) return true;
+			// We always overwrite on PV
+			if (isPV) return true;
+			auto entry = getEntry(index);
+			if (entry.isPV()) return false;
+			// Second entry is always replaced with different position
+			if (hash != entry.getHash()) return true;
+			// Having a move signals a beta-cutoff, we probably use the entry fast with PV bounds
+			if (!move.isEmpty()) return true;
+
+			if (computedDepth >= entry.getComputedDepth()) return true;
+			return false;
 		} 
 
 		/**
@@ -134,11 +152,11 @@ namespace QaplaSearch {
 				return index;
 			}
 
-			bool hashIsDifferent = !_tt[index].hasHash(hashKey);
-			if (!hashIsDifferent || _tt[index].isPV() || isNewEntryMoreValuable(index, computedDepth, move, isPV))
+			if (replaceFirstEntry(index, hashKey, computedDepth, move, isPV))
 			{
-				if (hashIsDifferent && _tt[index + 1].doOverwriteAlwaysReplaceEntry(
-					positionValue, alpha, beta, computedDepth)) 
+				// Do not store a position twice
+				bool hashIsDifferent = !_tt[index].hasHash(hashKey);
+				if (hashIsDifferent && replaceSecondEntry(index + 1, hashKey, computedDepth, move, isPV))
 				{
 					// Logically equivalent to: _tt[index + 1] = new; swap(_tt[index], _tt[index + 1]);
 					// This allows checking if _tt[index + 1] was from a previous search before overwriting.
@@ -148,8 +166,7 @@ namespace QaplaSearch {
 				}
 				set(index, isPV, hashKey, computedDepth, ply, move, eval, positionValue, alpha, beta, nullmoveThreat);
 			}
-			else if (_tt[index + 1].doOverwriteAlwaysReplaceEntry(positionValue, alpha, beta, computedDepth))
-			{
+			else if (replaceSecondEntry(index + 1, hashKey, computedDepth, move, isPV)){ 
 				if (isEntryFromFormerSearch(_tt[index + 1])) _entries++;
 				set(index + 1, isPV, hashKey, computedDepth, ply, move, eval, positionValue, alpha, beta, nullmoveThreat);
 			}

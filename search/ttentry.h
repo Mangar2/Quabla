@@ -203,10 +203,21 @@ namespace QaplaSearch {
 		 * Decides, if a value is good enough to overwrite a "always replace" entry
 		 * (It is not "always overwrite" only "mostly overwrite")
 		 */
-		inline bool doOverwriteAlwaysReplaceEntry(
-			value_t positionValue, value_t alpha, value_t beta, ply_t computedDepth) const
+		inline bool doOverwriteAlwaysReplaceEntry(bool newIsPV, bool hashIsDifferent, Move move, ply_t computedDepth) const
 		{
-			return true;
+			bool result = true;
+			if (newIsPV) return true;
+			// Never replace a PV entry
+			if (isPV()) return false;
+			if (hashIsDifferent) return true;
+			if (!move.isEmpty() && move != getMove()) return true;
+			if (move.isEmpty() && !getMove().isEmpty()) return false;
+			if (hasExactValue()) {
+				if (!newIsPV || computedDepth <= getComputedDepth()) {
+					result = false;
+				}
+			}
+			return result;
 		}
 
 
