@@ -85,9 +85,10 @@ namespace QaplaSearch {
 			// We always overwrite on PV
 			if (isPV) return true;
 			auto entry = getEntry(index);
+			// We always replace the same position, no matter what. 
+			if (hash == entry.getHash()) return true;
+
 			if (entry.isPV()) return false;
-			// Second entry is always replaced with different position
-			if (hash != entry.getHash()) return true;
 			// Having a move signals a beta-cutoff, we probably use the entry fast with PV bounds
 			if (!move.isEmpty()) return true;
 			return computedDepth >= entry.getComputedDepth();
