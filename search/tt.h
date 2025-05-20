@@ -100,7 +100,16 @@ namespace QaplaSearch {
 			// Having a move signals a beta-cutoff, we probably use the entry fast with PV bounds
 			//if (!move.isEmpty()) return true;
 
-			return (computedDepth > entry.getComputedDepth());
+			return (computedDepth >= entry.getComputedDepth());
+		} 
+
+		bool keepPV(uint32_t index, ply_t computedDepth) const{
+			auto entry = getEntry(index);
+			if (entry.isPV() && computedDepth < entry.getComputedDepth()){
+				entry.updateEntryAgeIndicator(_ageIndicator);
+				return true;
+			}  
+			return false;
 		} 
 
 		/**
@@ -147,6 +156,10 @@ namespace QaplaSearch {
 				return index;
 			}
 			bool sameHash = _tt[index].hasHash(hashKey);
+			// PV from former search are kept, if the same positin is reached but searched with lower depth
+			if (sameHash && keepPV(index, computedDepth)) {
+				return index;
+			} 
 			if (sameHash || replaceFirstEntry(index, computedDepth, move, isPV))
 			{
 				// Do not store a position twice
